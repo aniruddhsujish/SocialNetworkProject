@@ -1,5 +1,5 @@
 # SocialNetworkProject
- A basic social network implemented with Node.js,Express.js and MonogDB
+ A basic social network implemented with Node.js,Express.js and MongoDB
 # Running the Server
  1. Open cmd or terminal in the project directory
  2. Run npm install
