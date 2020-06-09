@@ -1,24 +1,42 @@
-/*global $*/
 
-function onload(){
-    //start a promise chain
-    Promise.resolve()
-    .then(function(){
-        return $.post('GetAllPosts');  
-    })
-    //when the server responds, we'll execute this code
-    .then(function(posts){
-        //jQuery function to set the innerHTML of the div with id = 'posts' to empty
-       // $('#feed-container').empty();
-        //loop over each post item in the posts array
-        posts.forEach(function(post){
+
+function onLoad(){
+
+  const params = new URLSearchParams(document.location.search);
+  const usrID = params.get("userID");
+  console.log(usrID);
+	Promise.resolve()
+	.then(function(){
+		return $.post('GetUserDetails',{id : usrID});
+	})
+	.then(function(userInfo){
+		var user = userInfo[0]
+		$('#info-container').prepend(
+			'<a href="" class="">' +
+            '<img src="'+ user.profilePicture +'" class="profile-image"></img>' +
+            '</a>' +
+            '<div>' +
+            '<a class="profile-name" href="">' + user.username + '</a>'+
+            '</div>' +
+            '<div>' +
+            '<a class="profile-info" href="">' + user.email + '</a>'+
+            '</div>'
+			
+		);
+
+		Promise.resolve()
+		.then(function(){
+			return $.post('GetPosts',{id: usrID});
+		})
+		.then(function(posts){
+			posts.forEach(function(post){
             Promise.resolve()
             .then(function(posts){
         
               var feedBlockTemplate = "";
               var likesText = (post.likeCount > 1)? "likes": "like";
               
-              $('#feed-container').prepend(
+              $('#profile-container').prepend(
                 '<div class="feed-block" data-postId="' + post._id + '">' +
                 '  <div class="feed-header">' +
                 '    <a href="" class="feed-time">' +
@@ -29,7 +47,7 @@ function onload(){
                 '    <img src="'+ post.imageURL +'" class="img-responsive" alt="">' +
                 '  </a>' +
                 '  <div class="feed-body">' +
-                '    <p class="likes"><span id ="like' + post._id + '">'+ post.likeCount +'</span> '+ likesText +'</p>' +
+                '    <p href="" class="likes"><span id ="like' + post._id + '">'+ post.likeCount +'</span> '+ likesText +'</p>' +
                 '    <ul class="comment-list">' +
                 '      <li>' +
                 '        <a class="feed-user" href="">' +
@@ -58,7 +76,7 @@ function onload(){
                       '      <img src="'+ user.profilePicture +'" class="feed-avatar-image small"></img>' +
                       '    </a>' +
                       '    <div class="feed-info">' +
-                      '      <a class="feed-user" href="userprofile?userID='+post.userID+'">' + user.username + '</a></div>'
+                      '      <a class="feed-user" href="">' + user.username + '</a></div>'
                   );
               })
               .then(function(){
@@ -100,11 +118,11 @@ function onload(){
               console.log(err);
             });
         });
-    })
-    .catch(function(err){
-        //always include a catch for exceptions
-        console.log(err);
-    });
+		})
+	})
+	.catch(function(err){
+		console.log(err);
+	});
 }
 
 function likeClick(id){
@@ -134,17 +152,33 @@ function likeClick(id){
 }
 
 function commentClick(id){
-  event.preventDefault();
-  console.log('comment');
-  var comment = document.getElementById('commentform'+id);
-  var input = comment.getElementsByTagName('input');
-  Promise.resolve()
-  .then(function(){
-    return $.post('uploadComment',{id:id,comment:input[0].value})
-  }).then(function(){
-    window.location.reload();
-  })
+	event.preventDefault();
+	console.log('comment');
+	var comment = document.getElementById('commentform'+id);
+	var input = comment.getElementsByTagName('input');
+	Promise.resolve()
+	.then(function(){
+		return $.post('uploadComment',{id:id,comment:input[0].value})
+	}).then(function(){
+		window.location.reload();
+	})
 }
+
+
+
+function updateNameClick(){
+	event.preventDefault();
+	console.log('updatename');
+	var name = document.getElementById('uploadForm2');
+	var newName = name.getElementsByTagName('input');
+	Promise.resolve()
+	.then(function(){
+		return $.post('updateName',{name:newName[0].value})
+	}).then(function(){
+		window.location.reload();
+	})
+}
+
 
 function uploadClick(){
     //go get the data from the form
@@ -168,3 +202,27 @@ function uploadClick(){
             error: function(er){}
     });            
 }
+
+function uploadProfileClick(){
+    //go get the data from the form
+    var form = new FormData($("#uploadForm1")[0]);
+    //we can post this way as well as $.post
+    $.ajax({
+            url: '/uploadProfile',
+            method: "POST",
+            dataType: 'json',
+            //the form object is the data
+            data: form,
+            //we want to send it untouched, so this needs to be false
+            processData: false,
+            contentType: false,
+            //add a message 
+            success: function(result){
+              setTimeout(function(){
+                window.location.reload(true);
+              },1000);
+            },
+            error: function(er){}
+    });            
+}
+

@@ -91,6 +91,10 @@ router.get('/profile',function(req,res)
   res.sendfile(path.join(__dirname,'client','profile.html'));
 });
 
+router.get('/userprofile',function(req,res){
+	res.sendfile(path.join(__dirname,'client','user_profile.html'));
+});
+
 //submit LOGIN
 router.post('/login', function(req, res, next) 
 {
@@ -202,7 +206,7 @@ router.get('/verifypassword', function(req, res)
     Promise.resolve()
     .then(function()
     {
-      return PasswordReset.findOne({id: req.body.id});
+      return PasswordReset.findOne({_id: req.query.id});
     })
     .then(function(pr)
     {
@@ -212,7 +216,7 @@ router.get('/verifypassword', function(req, res)
         //{
           password = pr.password;
           //see if there's a user with this email
-          return User.findById({_id:pr.userID});
+          return User.findById(pr.userID);
         //}
       }
     })
@@ -265,6 +269,23 @@ router.post('/GetUserPosts',function(req,res)
   })
 })
 
+//gets all POSTS of given user
+router.post('/GetPosts',function(req,res){
+	Post.find({userID:req.body.id})
+	.then(function(paths){
+		res.json(paths);
+	})
+})
+
+//get userID for a username
+router.post('/GetUserID',function(req,res){
+	console.log("User name is " + req.body.username);
+	User.findOne({username:req.body.username})
+	.then(function(paths){
+		console.log(id);
+		res.json(paths);
+	})
+})
 //add a COMMENT to a post
 router.post('/uploadComment',function(req,res){
   console.log('Adding comment to post' + req.body.id);
