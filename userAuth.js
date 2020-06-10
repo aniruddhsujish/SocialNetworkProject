@@ -84,7 +84,7 @@ function handleSignupAttempt(email, password, cb){
                 user = new User();
                 user.username = email.split("@")[0];
                 user.email = email;
-                user.profilePicture= "./img/glyphicons-halflings.png";
+                user.profilePicture= "./dp/No_dp.png";
                 user.password = hash.createHash(password);
                 return user.save();
             })

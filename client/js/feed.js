@@ -9,7 +9,7 @@ function onload(){
     //when the server responds, we'll execute this code
     .then(function(posts){
         //jQuery function to set the innerHTML of the div with id = 'posts' to empty
-       // $('#feed-container').empty();
+        //$('#feed-container').empty();
         //loop over each post item in the posts array
         posts.forEach(function(post){
             Promise.resolve()
