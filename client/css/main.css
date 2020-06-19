@@ -41,7 +41,7 @@ header { background:#ffec45 center no-repeat; line-height: 76px; margin-bottom: 
 
 .feed-image { display:block; float:left; width: 100%; } 
 .feed-image img { min-width:633px }
-.feed-body { float:left;padding: 0 24px; clear:both; overflow:hidden; }
+.feed-body { float:left;padding: 0 24px; clear:both; overflow:hidden; width:100%;}
 
 .likes {margin-bottom:10px; margin-top:20px; font-weight: 600; }
 .comment-list { padding:0; list-style:none; }
@@ -49,7 +49,7 @@ header { background:#ffec45 center no-repeat; line-height: 76px; margin-bottom: 
 
 .like-photo { font-size: 24px; margin-right:10px; }
 .add-comment { border-top: 1px solid #efefef; min-height: 68px; line-height:68px; width:100%;}
-.add-comment-form { display: inline-block; max-width:90%;}
+.add-comment-form { display:inline-block; width:80%;float:right;}
 .add-comment-input { border:none; width:100%;}
 
 
@@ -59,6 +59,46 @@ header { background:#ffec45 center no-repeat; line-height: 76px; margin-bottom: 
 
 .logolink:hover { text-decoration: none; }
 .rightmenu:hover { text-decoration: none; color:black; }
+
+.searchbar { margin-top: 5px }
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+.autocomplete { width:100%;}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
 
 @media (max-width: 1024px) {
     header { background-image:none; }

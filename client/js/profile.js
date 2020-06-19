@@ -1,8 +1,33 @@
 
 
 function onLoad(){
-
+  var empty=true;
 	Promise.resolve()
+  .then(function(){
+    return $.post('GetPendingRequests');
+  })
+  .then(function(reqs){
+    console.log(reqs)
+    if(reqs.length == 0){
+      $('#myDropdown').prepend(
+              '<p class="req">No Requests to show</p>'
+          );
+    }
+    reqs.forEach(function(req){
+       Promise.resolve()
+        .then(function(){
+          return $.post('GetUserDetails',{id : req.followID});
+        })
+        .then(function(userInfo){
+          var user = userInfo[0]
+          console.log(req);
+          $('#myDropdown').prepend(
+              '<a onclick="acceptreq(\''+req.followID+'\');">'+user.username+' has requested to follow you. Click to accept.</a>'
+          );
+        });
+      
+    });
+  })
 	.then(function(){
 		return $.post('GetDetails');
 	})
@@ -26,6 +51,13 @@ function onLoad(){
 			return $.post('GetUserPosts');
 		})
 		.then(function(posts){
+      if(posts.length == 0){
+        $('#profile-container').prepend(
+          '<div class="text-center">'+
+            ' <h2>You havent posted anything yet!</h2>'+
+            '</div>'
+        )
+      }
 			posts.forEach(function(post){
             Promise.resolve()
             .then(function(posts){
@@ -223,3 +255,12 @@ function uploadProfileClick(){
     });            
 }
 
+function acceptreq(id){
+  Promise.resolve()
+  .then(function(){
+    console.log('here');
+    return $.post('AcceptRequest',{id:id});
+  }).then(function(){
+    window.location.reload();
+  })
+}

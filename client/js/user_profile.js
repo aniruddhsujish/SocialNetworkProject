@@ -1,14 +1,46 @@
 
-
 function onLoad(){
 
+  //var FollowList=[]
   const params = new URLSearchParams(document.location.search);
   const usrID = params.get("userID");
   console.log(usrID);
+  var accepted = false;
+  var following = false;
 	Promise.resolve()
-	.then(function(){
-		return $.post('GetUserDetails',{id : usrID});
-	})
+  .then(function(){
+    return $.post('GetFollowing');
+  })
+  .then(function(follows){
+      //FollowList = []
+      /*follows.forEach(function(follow){
+        FollowList.push(follow.followingID);
+      })*/
+      console.log(follows);
+
+        follows.forEach(function(follow){
+          if(follow.followingID == usrID){
+            console.log(follow);
+            if(follow.status == 1){
+              $('#followbtn').text('Following');
+              accepted = true;
+              following = true;
+            }else if(follow.status == 0){
+              $('#followbtn').text('Follow Req Sent');
+              following = true;
+            }
+          }
+        })
+        if(following == false){
+          $('#followbtn').text('Follow');
+        }
+      
+      console.log(accepted);
+      console.log(following);
+    })
+  .then(function(){
+    return $.post('GetUserDetails',{id : usrID});
+  })
 	.then(function(userInfo){
 		var user = userInfo[0]
 		$('#info-container').prepend(
@@ -29,7 +61,26 @@ function onLoad(){
 			return $.post('GetPosts',{id: usrID});
 		})
 		.then(function(posts){
+      if(!accepted){
+            if(following){
+              console.log('here');
+              $('#profile-container').prepend(
+                '<div class="text-center">'+
+                ' <h2>Waiting for User to accept your follow request</h2>'+
+                '</div>'
+              );
+            }else{
+              console.log('here2');
+              $('#profile-container').prepend(
+                '<div class="text-center">'+
+                ' <h2>Account is private</h2>'+
+                '</div>'
+              );
+            }
+          }
 			posts.forEach(function(post){
+          if(accepted){
+            console.log('here3');
             Promise.resolve()
             .then(function(posts){
         
@@ -117,6 +168,7 @@ function onLoad(){
               //always include a catch for exceptions
               console.log(err);
             });
+          }
         });
 		})
 	})
@@ -226,3 +278,14 @@ function uploadProfileClick(){
     });            
 }
 
+function follow(){
+  const params = new URLSearchParams(document.location.search);
+  const usrID = params.get("userID");
+  Promise.resolve()
+  .then(function(){
+    return $.post('SendFollowReq',{id : usrID});
+  })
+  .then(function(){
+    $('#followbtn').text('Follow Req Sent');
+  })
+}

@@ -1,8 +1,27 @@
 /*global $*/
-
 function onload(){
     //start a promise chain
+    var FollowList=[];
+    var empty=true;
     Promise.resolve()
+    .then(function(){
+      return $.post('GetUsers');
+    }).then(function(users){
+      autocomplete(document.getElementById("txt-search"),users);
+    })
+    .then(function(){
+      return $.post('GetFollowing');
+    })
+    .then(function(follows){
+      FollowList = []
+      follows.forEach(function(follow){
+        if(follow.status == 1){
+          FollowList.push(follow.followingID);
+        }
+        
+      })
+      console.log(FollowList);
+    })
     .then(function(){
         return $.post('GetAllPosts');  
     })
@@ -12,6 +31,8 @@ function onload(){
         //$('#feed-container').empty();
         //loop over each post item in the posts array
         posts.forEach(function(post){
+          if(FollowList.includes(post.userID)){
+            empty=false;
             Promise.resolve()
             .then(function(posts){
         
@@ -99,7 +120,15 @@ function onload(){
               //always include a catch for exceptions
               console.log(err);
             });
+          }
         });
+        if(empty==true){
+          $('#feed-container').prepend(
+            '<div class="text-center">'+
+            ' <h2>No posts to show! Follow some Users</h2>'+
+            '</div>'
+          )
+        }
     })
     .catch(function(err){
         //always include a catch for exceptions

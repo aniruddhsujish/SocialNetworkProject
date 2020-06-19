@@ -24,6 +24,7 @@ var Hashtag = require('./models/Hashtag.js');
 var User = require('./models/User.js');
 var Like = require('./models/Like.js');
 var PasswordReset = require('./models/PasswordReset.js');
+var Follow = require('./models/Follows.js');
 
 //sendmail
 const email = require('./utils/sendmail.js');
@@ -31,8 +32,7 @@ const email = require('./utils/sendmail.js');
 var router = express();
 var server = http.createServer(router);
 
-//const dbUrl = 'mongodb://Aniruddh:<password>@freecluster-shard-00-00-k5dgb.mongodb.net:27017,freecluster-shard-00-01-k5dgb.mongodb.net:27017,freecluster-shard-00-02-k5dgb.mongodb.net:27017/test?ssl=true&replicaSet=FreeCluster-shard-0&authSource=admin&retryWrites=true&w=majority'
-const dbUrl = 'mongodb://testuser:testuser@freecluster-shard-00-00-k5dgb.mongodb.net:27017,freecluster-shard-00-01-k5dgb.mongodb.net:27017,freecluster-shard-00-02-k5dgb.mongodb.net:27017/aloha?ssl=true&replicaSet=FreeCluster-shard-0&authSource=admin&retryWrites=true&w=majority'
+const dbUrl = 'mongodb://testuser:trial@freecluster-shard-00-00-k5dgb.mongodb.net:27017,freecluster-shard-00-01-k5dgb.mongodb.net:27017,freecluster-shard-00-02-k5dgb.mongodb.net:27017/aloha?ssl=true&replicaSet=FreeCluster-shard-0&authSource=admin&retryWrites=true&w=majority'
 
 
 //establish connection to our mongodb instance
@@ -73,7 +73,7 @@ router.get('/', function(req, res)
 {
   console.log('client requests root');
   //use sendfile to send our signin.html file
-  res.sendfile(path.join(__dirname, 'client','signin.html'));
+  res.sendfile(path.join(__dirname, 'client','login.html'));
 });
 
 //request LOGIN
@@ -129,7 +129,7 @@ router.post('/login', function(req, res, next)
 router.get('/join', function(req, res)
 {
   console.log('client requests join');
-  res.sendFile(path.join(__dirname, 'client', 'signin.html'));//EDIT THIS 
+  res.sendfile(path.join(__dirname, 'client', 'signin.html'));
 });
 
 //submit JOIN
@@ -277,6 +277,15 @@ router.post('/GetPosts',function(req,res){
 	})
 })
 
+//get all Usernames
+router.post('/GetUsers',function(req,res){
+  console.log("Find all user names");
+  User.find({})
+  .then(function(paths){
+    res.json(paths);
+  })
+})
+
 //get userID for a username
 router.post('/GetUserID',function(req,res){
 	console.log("User name is " + req.body.username);
@@ -351,13 +360,68 @@ router.post('/GetUserDetails', function(req, res)
 
 //request to get DETAILS of current user
 router.post('/GetDetails',function(req,res){
-  console.log('Get deails of current user ');
+  console.log('Get details of current user ');
   User.find({_id:req.user.id})
   .then(function(paths){
     res.json(paths);
   });
 })
 
+//Send a follow request to a User
+router.post('/SendFollowReq',function(req,res){
+  console.log('Sending follow req');
+  var follow = new Follow();
+  follow.status=0;
+  follow.followID = req.user.id;
+  follow.followingID= req.body.id;
+  follow.save()
+  .then(function(){
+            
+    res.json({success: true, message: 'all good'});            
+  });
+})
+
+
+
+//Get list of following for User
+router.post('/GetFollowing',function(req,res){
+  console.log('Get List of Following for user');
+  Follow.find({followID: req.user.id})
+  .then(function(follows){
+    //var list = [];
+    /*follows.forEach(function(follow){
+        if(follow.status == 1){
+          list.push(follow);
+        }
+    });*/
+    res.json(follows);
+  })
+})
+
+//Get pending follow requests for User
+router.post('/GetPendingRequests',function(req,res){
+  Follow.find({followingID: req.user.id})
+  .then(function(followreqs){
+    var list = [];
+    followreqs.forEach(function(follow){
+        if(follow.status == 0){
+          list.push(follow);
+        }
+    });
+    res.json(list);
+  })
+})
+
+router.post('/AcceptRequest',function(req,res){
+  Follow.findOne({followingID: req.user.id, followID: req.body.id})
+  .then(function(follow){
+    follow.status = 1;
+    follow.save();
+  })
+  .then(function(){
+    res.json({success: true, message: 'all good'});
+  })
+})
 //request to INCREMENT LIKE
 router.post('/incrLike', userAuth.isAuthenticated, function(req, res)
 {
@@ -495,7 +559,7 @@ router.post('/upload', userAuth.isAuthenticated, function(req, res)
   }
 });
 
-
+//to upload PROFILE PICTURE
 router.post('/uploadProfile', userAuth.isAuthenticated, function(req, res) 
 {
   var response = {success: false, message: ''};
