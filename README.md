@@ -9,9 +9,11 @@
 
 # Features
  1. Log in and Sign up 
- 2. View posts by all users in feed page
+ 2. View posts by all users being followed in feed page
  3. Comment and like pictures of other users
- 4. Access Profile page of user
- 5. Change user name and profile picture in Profile page
- 6. Send e-mail to reset or change password (bugs yet to be fixed)
+ 4. Search for another user on the platform
+ 5. Access Profile page of user and send follow requests
+ 6. Change user name and profile picture in Profile page
+ 7. Accept pending follow requests 
+ 8. Send e-mail to reset or change password (bugs yet to be fixed)
  
