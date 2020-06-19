@@ -32,7 +32,6 @@ const email = require('./utils/sendmail.js');
 var router = express();
 var server = http.createServer(router);
 
-//const dbUrl = 'mongodb://Aniruddh:<password>@freecluster-shard-00-00-k5dgb.mongodb.net:27017,freecluster-shard-00-01-k5dgb.mongodb.net:27017,freecluster-shard-00-02-k5dgb.mongodb.net:27017/test?ssl=true&replicaSet=FreeCluster-shard-0&authSource=admin&retryWrites=true&w=majority'
 const dbUrl = 'mongodb://testuser:trial@freecluster-shard-00-00-k5dgb.mongodb.net:27017,freecluster-shard-00-01-k5dgb.mongodb.net:27017,freecluster-shard-00-02-k5dgb.mongodb.net:27017/aloha?ssl=true&replicaSet=FreeCluster-shard-0&authSource=admin&retryWrites=true&w=majority'
 
 
@@ -74,7 +73,7 @@ router.get('/', function(req, res)
 {
   console.log('client requests root');
   //use sendfile to send our signin.html file
-  res.sendfile(path.join(__dirname, 'client','signin.html'));
+  res.sendfile(path.join(__dirname, 'client','login.html'));
 });
 
 //request LOGIN
@@ -130,7 +129,7 @@ router.post('/login', function(req, res, next)
 router.get('/join', function(req, res)
 {
   console.log('client requests join');
-  res.sendFile(path.join(__dirname, 'client', 'signin.html'));
+  res.sendfile(path.join(__dirname, 'client', 'signin.html'));
 });
 
 //submit JOIN
@@ -395,7 +394,6 @@ router.post('/GetFollowing',function(req,res){
           list.push(follow);
         }
     });*/
-    console.log(follows);
     res.json(follows);
   })
 })
@@ -410,7 +408,6 @@ router.post('/GetPendingRequests',function(req,res){
           list.push(follow);
         }
     });
-    console.log(list);
     res.json(list);
   })
 })

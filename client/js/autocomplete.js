@@ -28,7 +28,6 @@ function autocomplete(inp,arr) {
           b.innerHTML += "<input type='hidden' value='" + arr[i].username + "'>";
           b.innerHTML += "<input type='hidden' value='" + arr[i]._id + "'>";
           //console.log(arr[i]._id);
-          //b.setAttribute('href','userprofile?userID='+arr[i]._id);
           /*execute a function when someone clicks on the item value (DIV element):*/
              b.addEventListener("click", function(e) {
               /*insert the value for the autocomplete text field:*/
