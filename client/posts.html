@@ -20,13 +20,36 @@
             <button type="button" class="btn btn-blue" data-toggle="modal" data-target="#myModal">Add a Picture</button>
             
             <a href="posts" class="fa fa-compass fa-2x rightmenu"></a>
-            <a href="profile" class="fa fa-user fa-2x rightmenu"></a>  
+            <a href="profile" class="fa fa-user fa-2x rightmenu"></a> 
+            <!--<a href="." class="fa fa-bell fa-2x rightmenu"></a> -->
             <a href="." class="fa fa-sign-out fa-2x rightmenu"></a>
           </div>
+          <!--<div class=" col-md-3 center-block searchbar">
+            <form role="form" autocomplete="off">
+              <div class="autocomplete">
+                <input type="input" class= "form-control input-lg" id="txt-search" placeholder="Enter user">
+                <a class="fa fa-search like-photo"></a>
+              </div>
+            </form>
+            <div id="filter-user" class=" col-md-3 row result">
+            </div>
+            
+          </div>-->
       </div>
     </header>
+    
     <main class="main-feed">
       <div class="container">
+        <div class=" col-md-7 center-block searchbar">
+            <form role="form" autocomplete="off">
+              <div class="autocomplete input-group">
+                <input type="input" class= "form-control width100 " id="txt-search" placeholder="Enter user">
+              </div>
+            </form>
+            <div id="filter-user" class=" col-md-3 row result">
+            </div>
+            
+        </div><br>
         <div class="col-md-7 center-block" id="feed-container">
           <!--A div with Id is created as an anchour point for the javascript to do its work-->
         </div>
@@ -57,9 +80,11 @@
            <div id="posts"></div>
          </div>
     </main>
+
     
     <script src="/js/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="/js/feed.js"></script>
+    <script type="text/javascript" src = "/js/autocomplete.js"></script>
   </body>
 </html>

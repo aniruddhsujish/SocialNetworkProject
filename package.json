@@ -1,10 +1,10 @@
 {
   "name": "chat-example",
   "version": "0.0.0",
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
+  "description": "A social network example test with nodeJS and HTML",
   "main": "server.js",
   "repository": "",
-  "author": "Mostafa Eweda <mo.eweda@gmail.com>",
+  "author": "Aniruddh Sujish",
   "dependencies": {
     "async": "~0.2.8",
     "bcrypt-nodejs": "0.0.3",
