@@ -1,4 +1,4 @@
-const bCrypt = require('bcrypt-nodejs');
+const bCrypt = require('bcrypt');
 
 module.exports.createHash = function(password)
 {
