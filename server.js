@@ -32,8 +32,8 @@ const email = require('./utils/sendmail.js');
 var router = express();
 var server = http.createServer(router);
 
-const dbUrl = 'mongodb://testuser:trial@freecluster-shard-00-00-k5dgb.mongodb.net:27017,freecluster-shard-00-01-k5dgb.mongodb.net:27017,freecluster-shard-00-02-k5dgb.mongodb.net:27017/aloha?ssl=true&replicaSet=FreeCluster-shard-0&authSource=admin&retryWrites=true&w=majority'
-
+//MongoDB connection string
+const dbUrl = 'mongodb+srv://testuser:trial@freecluster-k5dgb.mongodb.net/aloha?retryWrites=true&w=majority';
 
 //establish connection to our mongodb instance
 mongoose.connect(dbUrl);
