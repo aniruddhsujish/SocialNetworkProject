@@ -6,7 +6,7 @@
   "repository": "",
   "author": "Aniruddh Sujish",
   "dependencies": {
-    "async": "~0.2.8",
+    "async": "~2.6.4",
     "bcrypt": "^5.0.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
