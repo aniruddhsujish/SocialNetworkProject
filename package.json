@@ -21,6 +21,6 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "smtp-connection": "^4.0.2",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   }
 }
